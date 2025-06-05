@@ -1,6 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.responses import FileResponse
 from pathlib import Path
+import shutil
 
 app = FastAPI()
 
@@ -17,3 +18,12 @@ async def download_file(filename:str):
     return FileResponse(
         path=f"uploads/{filename}", filename=filename
     )
+
+@app.post("/uploadfile")
+async def upload_file(file: UploadFile = File(...)):
+    with open(
+        f"uploads/{file.filename}", "wb"       
+    ) as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    return {"filename": file.filename}
+
