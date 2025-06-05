@@ -1,0 +1,1 @@
+this is a file texts for testing file management on fastapi
